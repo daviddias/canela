@@ -62,24 +62,26 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
     tracerOne.emitter.on('trace', function(trace){
       expect(trace.agentId).to.be.an.string();
       expect(trace.agentId).to.equal(tracerOne.agentId);
+       expect(trace.message).to.be.an.string();
       expect(trace.tag).to.equal(undefined);
       expect(trace.data).to.deep.equal(data);
       expect(new Date(trace.time)).to.be.a.date();  
       done();
     });
-    tracerOne.capture(data);
+    tracerOne.capture('simple capture', data);
   });
 
   test('capture with custom tracer', function (done){
     var data = { a: 8, b: { c: 10 } };
-    tracerTwo.emitter.on('trace', function(trace){
+    tracerTwo.emitter.on('trace', function(trace) {
       expect(trace.agentId).to.be.an.string();
       expect(trace.agentId).to.equal(tracerTwo.agentId);
+      expect(trace.message).to.be.an.string();
       expect(trace.tag).to.equal(undefined);
       expect(trace.data).to.deep.equal(data);
       expect(new Date(trace.time)).to.be.a.date();  
       done();
     });
-    tracerTwo.capture(data);
+    tracerTwo.capture('simple capture with custom tracer', data);
   });
 });
