@@ -8,17 +8,25 @@ exports.createTracer = function (options) {
 
 function tracer (options) {
   this.agentId = options.agentId || idGen();
-  this.activeTags = options.activeTags || []; 
-  this.emitter = options.emitter || new eventEmitter2({ wildcard: true, newListener: false, maxListeners: 200 }); // attach to an existing event emitter
-  this.active = options.active || true;
-  // this.windowTraces = {};
+  this.tags = options.tags || ['*']; 
+  this.emitter = options.emitter || new eventEmitter2({ wildcard: true, newListener: false, maxListeners: 200 }); 
+  
+  var isTracerActive = options.active || true;
   var that = this;
-
-  this.capture = function (message, data, traceTag) {
-    if (!that.active) { return; }
-    if (!isTraceActive(that.activeTags, traceTag)) { return; }
-    var trace = createTrace(that.agentId, message, data, traceTag);
-    that.emitter.emit('trace', trace);
+  // this.windowTraces = {};
+  
+  this.c = this.capture = function (options) {
+    if (!isTracerActive) { return; }
+    if (!isTagEnabled(that.tags, options.tag)) { return; }
+    
+    that.emitter.emit('trace', {
+      agentId: that.agentId,
+      tag: options.tag,
+      traceId: options.id,
+      description: options.description,
+      data: options.data,
+      time: Date.now()    
+    });
   };
 
   // 
@@ -45,30 +53,9 @@ function tracer (options) {
   return this;
 }
 
+function idGen () {return (~~(Math.random() * 1e9)).toString(36) + Date.now();}
 
-
-function idGen () {
-  return (~~(Math.random() * 1e9)).toString(36) + Date.now();
-}
-
-function createTrace(agentId, message, data, traceTag, traceId) {
-  return new trace(agentId, message, data, traceTag, traceId);
-}
-
-function trace (agentId, message, data, traceTag, traceId) {
-  this.trace = {
-    agentId: agentId,
-    message: message,
-    tag: traceTag || undefined,
-    data: data,
-    traceId: traceId || undefined,
-    time: Date.now(),
-
-  };
-  return this.trace;
-}
-
-function isTraceActive (activeTags, tag) {
-  if (tag === undefined) { return true; }
-  return activeTags.indexOf(tag) > -1;
+function isTagEnabled (tags, tag) {
+  if (tags.indexOf('*') > -1 || tag === undefined) { return true; }
+  return tags.indexOf(tag) > -1;
 }

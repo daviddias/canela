@@ -11,7 +11,7 @@ var expect = Code.expect;
 
 var canela = require('./../index.js');
 
-experiment('Spice that Pastel de Nata with a pinch of Canela to make it delicious', function () {
+experiment('pich of canela: ', function () {
 
   var tracerOne;
   var tracerTwo;
@@ -28,7 +28,7 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
     tracerOne = canela.createTracer({});
 
     expect(tracerOne.agentId).to.be.an.string();
-    expect(tracerOne.activeTags).to.be.an.array();
+    expect(tracerOne.tags).to.be.an.array();
     expect(tracerOne.emitter).to.be.an.object();
     expect(tracerOne.capture).to.be.a.function();
     done();
@@ -37,7 +37,7 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
   test('create a custom tracer', function (done) {
     var options = {
       agentId: 'custom tracer',
-      activeTags: ['app', 'db'],
+      tags: ['*'],
       emitter: new eventEmitter2({ wildcard: true, newListener: false, maxListeners: 10 })
     };
 
@@ -45,8 +45,8 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
 
     expect(tracerTwo.agentId).to.be.an.string();
     expect(tracerTwo.agentId).to.equal(options.agentId);
-    expect(tracerTwo.activeTags).to.be.an.array();
-    expect(tracerTwo.activeTags).to.deep.equal(options.activeTags);
+    expect(tracerTwo.tags).to.be.an.array();
+    expect(tracerTwo.tags).to.deep.equal(options.tags);
     expect(tracerTwo.emitter).to.be.an.object();
     expect(tracerTwo.emitter).to.equal(options.emitter);
     expect(tracerTwo.capture).to.be.a.function();
@@ -59,16 +59,18 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
 
   test('capture', function (done) {
     var data = { a: 5, b: { c: 6 } };
+
     tracerOne.emitter.on('trace', function(trace){
       expect(trace.agentId).to.be.an.string();
       expect(trace.agentId).to.equal(tracerOne.agentId);
-       expect(trace.message).to.be.an.string();
-      expect(trace.tag).to.equal(undefined);
+      expect(trace.description).to.be.an.string();
+      expect(trace.tag).to.equal('example-tag');
       expect(trace.data).to.deep.equal(data);
       expect(new Date(trace.time)).to.be.a.date();  
       done();
     });
-    tracerOne.capture('simple capture', data);
+
+    tracerOne.capture({tag: 'example-tag', id: 1, description: 'a trace', data: data});
   });
 
   test('capture with custom tracer', function (done){
@@ -76,12 +78,13 @@ experiment('Spice that Pastel de Nata with a pinch of Canela to make it deliciou
     tracerTwo.emitter.on('trace', function(trace) {
       expect(trace.agentId).to.be.an.string();
       expect(trace.agentId).to.equal(tracerTwo.agentId);
-      expect(trace.message).to.be.an.string();
-      expect(trace.tag).to.equal(undefined);
+      expect(trace.description).to.be.an.string();
+      expect(trace.tag).to.equal('another-tag');
       expect(trace.data).to.deep.equal(data);
       expect(new Date(trace.time)).to.be.a.date();  
       done();
     });
-    tracerTwo.capture('simple capture with custom tracer', data);
+
+    tracerTwo.capture({tag: 'another-tag', id: 4, description: 'another trace', data: data});
   });
 });
