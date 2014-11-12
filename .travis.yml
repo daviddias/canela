@@ -5,5 +5,9 @@ node_js:
 branches:
   only:
     - master
+
+before_install:
+  - npm i -g npm
+  # Workaround for a permissions issue with Travis virtual machine images
 script:
   - npm test
