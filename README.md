@@ -12,6 +12,48 @@
 # What is canela, why does it exist
 
 
+
+
+
+
 # How to use
+
+```
+var canela = require('canela');
+
+var options = {
+  agentId: '', // [optional] this tracer agentID, if not passed, a random will be generated
+  tags: ['*'], // [optional] an array of the active trace tags 
+  emitter: <EventEmitter2 Obj>, //[optional] attacht the trace events to an existing emitter,
+  active: true // if the trace captures are active or not  
+}
+
+var tracer = canela.createTracer(options)
+
+var ee = tracer.emitter;
+
+ee.on('trace', function (trace) {
+  { 
+    agentId: '82mu9d1416085771023',
+    tag: 'a',
+    traceId: 1,
+    description: 'a trace',
+    data: ,
+    time: 1416085771028 
+  }
+});
+
+tracer.capture({
+  tag: 'a',
+  id: 1,
+  description: 'a trace', 
+  data: { a: 5, b: { c: 6 } } 
+});
+```
+
+
+
+
+
 
 

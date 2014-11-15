@@ -61,6 +61,7 @@ experiment('pich of canela: ', function () {
     var data = { a: 5, b: { c: 6 } };
 
     tracerOne.emitter.on('trace', function(trace){
+      console.log(trace);
       expect(trace.agentId).to.be.an.string();
       expect(trace.agentId).to.equal(tracerOne.agentId);
       expect(trace.description).to.be.an.string();
