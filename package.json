@@ -1,6 +1,6 @@
 {
   "name": "canela",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "canela is a tracing tool for distributed applications",
   "main": "index.js",
   "scripts": {
