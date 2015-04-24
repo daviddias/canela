@@ -1,6 +1,8 @@
+> **canela** is a tracing tool for distributed applications
+
 ![](/img/logo.jpg)
 
-> **canela** is a tracing tool for distributed applications
+
 
 # Badgers
 [![NPM](https://nodei.co/npm/canela.png?downloads=true&stars=true)](https://nodei.co/npm/canela/)
@@ -49,7 +51,6 @@ tracer.capture({
   data: { a: 5, b: { c: 6 } } 
 });
 ```
-
 
 
 
