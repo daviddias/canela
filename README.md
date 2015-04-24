@@ -9,6 +9,8 @@
 [![Dependency Status](https://david-dm.org/diasdavid/canela.svg)](https://david-dm.org/diasdavid/canela)
 [![Build Status](https://travis-ci.org/diasdavid/canela.svg)](https://travis-ci.org/diasdavid/canela)
 
+[![](https://cldup.com/pgZbzoshyV-3000x3000.png)](http://www.gsd.inesc-id.pt/)
+
 # What is canela, why does it exist
 
 
